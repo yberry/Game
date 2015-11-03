@@ -25,21 +25,22 @@ void trou(CHAR_INFO* buffer, COORD bufferSize, int x, int y, CHAR lettre) {
 
 int _tmain(int argc, _TCHAR* argv[])
 {
+	HANDLE hOutput = (HANDLE)GetStdHandle(STD_OUTPUT_HANDLE);
+
+	COORD dwBufferSize = { SCREEN_WIDTH, SCREEN_HEIGHT };
+
+	SetConsoleScreenBufferSize(hOutput, dwBufferSize);
+
+	//Maximiser la taille de la fenêtre
+	HWND hwnd = GetForegroundWindow();
+	ShowWindow(hwnd, SW_MAXIMIZE);
+
+	COORD dwBufferCoord = { 0, 0 };
+	SMALL_RECT rcRegion = { 0, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1 };
+
+	CHAR_INFO buffer[SCREEN_HEIGHT][SCREEN_WIDTH];
+
 	while (!GetAsyncKeyState(VK_ESCAPE)) {
-		HANDLE hOutput = (HANDLE)GetStdHandle(STD_OUTPUT_HANDLE);
-
-		COORD dwBufferSize = { SCREEN_WIDTH, SCREEN_HEIGHT };
-		
-		SetConsoleScreenBufferSize(hOutput, dwBufferSize);
-
-		//Maximiser la taille de la fenêtre
-		HWND hwnd = GetForegroundWindow();
-		ShowWindow(hwnd, SW_MAXIMIZE);
-
-		COORD dwBufferCoord = { 0, 0 };
-		SMALL_RECT rcRegion = { 0, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1 };
-
-		CHAR_INFO buffer[SCREEN_HEIGHT][SCREEN_WIDTH];
 
 		ReadConsoleOutput(hOutput, (CHAR_INFO *)buffer, dwBufferSize,
 			dwBufferCoord, &rcRegion);
@@ -51,6 +52,12 @@ int _tmain(int argc, _TCHAR* argv[])
 		buffer[5][12].Char.AsciiChar = '!';
 		buffer[5][12].Attributes = 0x0A;*/
 
+		trou((CHAR_INFO *)buffer, dwBufferSize, 2, 50, 'O');
+		trou((CHAR_INFO *)buffer, dwBufferSize, 2, 60, 'O');
+		trou((CHAR_INFO *)buffer, dwBufferSize, 2, 50, 'O');
+		trou((CHAR_INFO *)buffer, dwBufferSize, 2, 60, 'O');
+		trou((CHAR_INFO *)buffer, dwBufferSize, 2, 50, 'O');
+		trou((CHAR_INFO *)buffer, dwBufferSize, 2, 60, 'O');
 		trou((CHAR_INFO *)buffer, dwBufferSize, 2, 50, 'O');
 		trou((CHAR_INFO *)buffer, dwBufferSize, 2, 60, 'O');
 
