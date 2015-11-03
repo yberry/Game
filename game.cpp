@@ -29,6 +29,13 @@ int _tmain(int argc, _TCHAR* argv[])
 		HANDLE hOutput = (HANDLE)GetStdHandle(STD_OUTPUT_HANDLE);
 
 		COORD dwBufferSize = { SCREEN_WIDTH, SCREEN_HEIGHT };
+		
+		SetConsoleScreenBufferSize(hOutput, dwBufferSize);
+
+		//Maximiser la taille de la fenêtre
+		HWND hwnd = GetForegroundWindow();
+		ShowWindow(hwnd, SW_MAXIMIZE);
+
 		COORD dwBufferCoord = { 0, 0 };
 		SMALL_RECT rcRegion = { 0, 0, SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1 };
 
