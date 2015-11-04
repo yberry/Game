@@ -40,7 +40,7 @@ public:
 	/*
 	Argument nbInputs : Définit le nombre d'inputs que l'on peut gérer à un instant donné.
 	*/
-	InputManager(HANDLE hInput, int nbInputs);
+	InputManager(int nbInputs);
 	~InputManager();
 
 	/*
