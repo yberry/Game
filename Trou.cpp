@@ -19,19 +19,29 @@ m_taupe(false)
 }
 
 /*
-Méthode pour dessiner un trou
+Méthode pour dessiner un trou avec le buffer de la console
 */
 void Trou::draw(CHAR_INFO* buffer, COORD bufferSize, char lettre) const {
-	(buffer + ((m_x + 1)*bufferSize.X + m_y))->Char.AsciiChar = lettre;
-	(buffer + ((m_x + 2)*bufferSize.X + m_y))->Char.AsciiChar = lettre;
-	(buffer + ((m_x + 1)*bufferSize.X + m_y + 4))->Char.AsciiChar = lettre;
-	(buffer + ((m_x + 2)*bufferSize.X + m_y + 4))->Char.AsciiChar = lettre;
-	(buffer + (m_x*bufferSize.X + m_y + 1))->Char.AsciiChar = lettre;
-	(buffer + (m_x*bufferSize.X + m_y + 2))->Char.AsciiChar = lettre;
-	(buffer + (m_x*bufferSize.X + m_y + 3))->Char.AsciiChar = lettre;
-	(buffer + ((m_x + 3)*bufferSize.X + m_y + 1))->Char.AsciiChar = lettre;
-	(buffer + ((m_x + 3)*bufferSize.X + m_y + 2))->Char.AsciiChar = lettre;
-	(buffer + ((m_x + 3)*bufferSize.X + m_y + 3))->Char.AsciiChar = lettre;
+	//Pour chaque ligne
+	for (int i(0); i < hauteur; i++) {
+		//Et pour chaque colonne
+		for (int j(0); j < largeur; j++) {
+			//Sauf les coins
+			if ((i != 0 && i != hauteur - 1) || (j != 0 && j != largeur - 1)) {
+				//On ajoute la lettre dans le buffer
+				(buffer + ((m_x + i)*bufferSize.X + m_y + j))->Char.AsciiChar = lettre;
+			}
+		}
+	}
+
+	//Pour chaque ligne à l'intérieur du trou
+	for (int i(1); i < hauteur - 1; i++) {
+		//Et pour chaque colonne à l'intérieur du trou
+		for (int j(1); j < largeur - 1; j++) {
+			//On remplit avec un autre caractère ou on l'enlève selon la présence de la taupe
+			(buffer + ((m_x + i)*bufferSize.X + m_y + j))->Char.AsciiChar = (this->m_taupe ? 'X' : ' ');
+		}
+	}
 }
 
 /*
