@@ -1,8 +1,15 @@
 #pragma once
 
 #include <vector>
+#include <list>
 #include "Trou.h"
 #include "Timer.h"
+
+struct SpawnedTaupeInfo
+{
+	unsigned int indice;
+	Timer timer;
+};
 
 class Map
 {
@@ -12,11 +19,10 @@ private:
 	Permet de stocker les trous créés
 	*/
 	std::vector<Trou*> map;
-	std::vector<Timer> _hideTimers;
-	std::vector<int> _spawnedTaupes;
+	std::list<SpawnedTaupeInfo> _spawnedTaupesInfo;
 	float _spawnFreq = 2;
-	float _hideDelay = 2;
-	Timer _timer;
+	float _hideDelay = 1.5;
+	Timer _spawnTimer;
 	float _nbMaxTaupes;
 
 public:
@@ -43,7 +49,12 @@ public:
 	*/
 	void draw(CHAR_INFO* buffer, COORD dwBufferSize) const;
 
+	/*
+	Méthode updateTaupe
+	Permet de gérer la disparition et l'appartion des taupes.
+	*/
 	void Map::updateTaupe();
+	
 	/*
 	Destructeur
 	*/
