@@ -61,6 +61,18 @@ public:
 	void setTaupe(bool taupe) { this->m_taupe = taupe; }
 
 	/*
+	Méthode getX
+	Permet de connaître la ligne du coin haut gauche du trou
+	*/
+	int getX() const { return this->m_x; }
+
+	/*
+	Méthode getY
+	Permet de connaître la colonne du coin haut gauche du trou
+	*/
+	int getY() const { return this->m_y; }
+
+	/*
 	Méthode de classe getLargeur
 	Permet de connaître la largeur d'un trou
 	*/
