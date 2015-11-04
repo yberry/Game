@@ -8,9 +8,10 @@ using namespace std;
 /*
 Constructeur de Map
 */
-Map::Map()
+Map::Map() :_timer(), _nbMaxTaupes(3)
 {
-	
+	_timer.start();
+	srand((unsigned int)(time(NULL)));
 }
 
 /*
@@ -20,7 +21,7 @@ Permet de savoir si une place pour un trou avec le coin haut gauche dont les coo
 bool Map::estDisponible(int x, int y) const {
 	int largeur = Trou::getLargeur();
 	int hauteur = Trou::getHauteur();
-	
+
 	for (unsigned int i(0); i < this->map.size(); i++) {
 		int _x = this->map[i]->getX();
 		int _y = this->map[i]->getY();
@@ -55,18 +56,37 @@ void Map::draw(CHAR_INFO* buffer, COORD dwBufferSize) const {
 
 //WIP
 void Map::updateTaupe() {
-	srand(time(NULL));
-	int spawn = rand() % 20 + 1;
-	if (spawn == 2) {
-		int size = (int) this->map.size();
-		int num = rand() % size;
-		Trou* trou = this->map[num];
-		while (trou->getTaupe()) {
-			num = rand() % size;
-			trou = this->map[num];
-		}
-		trou->setTaupe(true);
 
+	for (unsigned int i = 0; i < _spawnedTaupes.size(); i++)
+	{
+		if (_hideTimers[i].getElapsedSeconds() >= _hideDelay)
+		{
+			map[_spawnedTaupes[i]]->setTaupe(false);
+			_spawnedTaupes.erase(_spawnedTaupes.begin() + i);
+			_hideTimers.erase(_hideTimers.begin() + i);
+		}
+	}
+
+
+	if (_timer.getElapsedSeconds() < _spawnFreq)
+		return;
+	
+	_timer.start();	
+	_spawnFreq = 1.0f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (3.0f - 1.0f)));
+
+	if (_spawnedTaupes.size() < _nbMaxTaupes)
+	{
+		int num = 0;
+		
+		do
+		{
+			num = rand() % this->map.size();
+		} while (this->map[num]->getTaupe());
+		
+		this->map[num]->setTaupe(true);
+		_spawnedTaupes.push_back(num);
+		_hideTimers.push_back(Timer());
+		_hideTimers[_hideTimers.size() - 1].start();
 	}
 }
 
