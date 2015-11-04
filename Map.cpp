@@ -26,7 +26,7 @@ bool Map::estDisponible(int x, int y) const {
 		int _x = this->map[i]->getX();
 		int _y = this->map[i]->getY();
 
-		if (abs(x - _x) < hauteur && abs(y - _y) < largeur) {
+		if (abs(x - _x) < largeur && abs(y - _y) < hauteur) {
 			return false;
 		}
 	}
@@ -71,7 +71,7 @@ void Map::updateTaupe() {
 		if (it->timer.getElapsedSeconds() >= _hideDelay)
 		{
 			map[it->indice]->setTaupe(false);	//Disparition de la taupe
-			iterators_to_erase.push_back(it);	
+			iterators_to_erase.push_back(it);
 		}
 	}
 
@@ -84,7 +84,7 @@ void Map::updateTaupe() {
 	//Si on doit encore attendre avant de spawner une taupoe, on sort de la fonction
 	if (_spawnTimer.getElapsedSeconds() < _spawnFreq)
 		return;
-	
+
 	//On relance le timer et on détermine un nouveau délaiu avant le porchain spawn
 	_spawnTimer.start();
 	_spawnFreq = 1.0f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (3.0f - 1.0f)));
@@ -93,19 +93,43 @@ void Map::updateTaupe() {
 	if (_spawnedTaupesInfo.size() < _nbMaxTaupes)
 	{
 		int num = 0;
-		
+
 		//On trouve un trou libre
 		do
 		{
 			num = rand() % this->map.size();
 		} while (this->map[num]->getTaupe());
-		
+
 		//On fait spawner la taupe :
 		this->map[num]->setTaupe(true);
 		SpawnedTaupeInfo taupeInfo = { num, Timer() };
 		taupeInfo.timer.start();
-		_spawnedTaupesInfo.push_back(taupeInfo);		
+		_spawnedTaupesInfo.push_back(taupeInfo);
 	}
+}
+
+/*
+Méthode qui permet de vérifier le clic sur une taupe
+*/
+bool Map::hit(COORD clic) {
+	//Pour chaque trou
+	for (unsigned int i(0); i < this->map.size(); i++) {
+		//On vérifie le clic
+		if (this->map[i]->hit(clic)) {
+			//Si on touche, on enlève la taupe de la liste
+			for (list <SpawnedTaupeInfo>::iterator it = _spawnedTaupesInfo.begin(); it != _spawnedTaupesInfo.end(); ++it)
+			{
+				if (it->indice == i)
+				{
+					_spawnedTaupesInfo.erase(it);
+					break;
+				}									
+			}
+			return true;
+		}
+	}
+
+	return false;
 }
 
 /*
