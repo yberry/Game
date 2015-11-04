@@ -53,11 +53,16 @@ public:
 	Méthode updateTaupe
 	Permet de gérer la disparition et l'appartion des taupes.
 	*/
-	void Map::updateTaupe();
-	
+	void updateTaupe();
+
+	/*
+	Méthode hit
+	Permet de vérifier le clic sur une taupe
+	*/
+	bool hit(COORD clic);
+
 	/*
 	Destructeur
 	*/
 	~Map();
 };
-
