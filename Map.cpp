@@ -8,9 +8,9 @@ using namespace std;
 /*
 Constructeur de Map
 */
-Map::Map() :_timer(), _nbMaxTaupes(3)
+Map::Map() :_spawnTimer(), _nbMaxTaupes(3)
 {
-	_timer.start();
+	_spawnTimer.start();
 	srand((unsigned int)(time(NULL)));
 }
 
@@ -54,39 +54,57 @@ void Map::draw(CHAR_INFO* buffer, COORD dwBufferSize) const {
 	}
 }
 
-//WIP
+/*
+Méthode updateTaupe
+Permet de gérer la disparition et l'appartion des taupes.
+*/
 void Map::updateTaupe() {
 
-	for (unsigned int i = 0; i < _spawnedTaupes.size(); i++)
+	///////////////////HIDE MECHANIC :
+
+	vector<list<SpawnedTaupeInfo>::iterator> iterators_to_erase;	//Contiendra les éléments à supprimer sur la liste des taupes présentes.
+
+	//Pour toutes les taupes présentes :
+	for (list<SpawnedTaupeInfo>::iterator it = _spawnedTaupesInfo.begin(); it != _spawnedTaupesInfo.end(); ++it)
 	{
-		if (_hideTimers[i].getElapsedSeconds() >= _hideDelay)
+		//Si il est temps pour la taupe de rentrer dans son trou :
+		if (it->timer.getElapsedSeconds() >= _hideDelay)
 		{
-			map[_spawnedTaupes[i]]->setTaupe(false);
-			_spawnedTaupes.erase(_spawnedTaupes.begin() + i);
-			_hideTimers.erase(_hideTimers.begin() + i);
+			map[it->indice]->setTaupe(false);	//Disparition de la taupe
+			iterators_to_erase.push_back(it);	
 		}
 	}
 
+	//Suppression des infos des taupes qui viennent de se cacher :
+	for (unsigned int i = 0; i < iterators_to_erase.size(); i++)
+		_spawnedTaupesInfo.erase(iterators_to_erase[i]);
 
-	if (_timer.getElapsedSeconds() < _spawnFreq)
+	///////////////////SPAWN MECHANIC :
+
+	//Si on doit encore attendre avant de spawner une taupoe, on sort de la fonction
+	if (_spawnTimer.getElapsedSeconds() < _spawnFreq)
 		return;
 	
-	_timer.start();	
+	//On relance le timer et on détermine un nouveau délaiu avant le porchain spawn
+	_spawnTimer.start();
 	_spawnFreq = 1.0f + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (3.0f - 1.0f)));
 
-	if (_spawnedTaupes.size() < _nbMaxTaupes)
+	//Si on a pas atteint le maximum de taupes
+	if (_spawnedTaupesInfo.size() < _nbMaxTaupes)
 	{
 		int num = 0;
 		
+		//On trouve un trou libre
 		do
 		{
 			num = rand() % this->map.size();
 		} while (this->map[num]->getTaupe());
 		
+		//On fait spawner la taupe :
 		this->map[num]->setTaupe(true);
-		_spawnedTaupes.push_back(num);
-		_hideTimers.push_back(Timer());
-		_hideTimers[_hideTimers.size() - 1].start();
+		SpawnedTaupeInfo taupeInfo = { num, Timer() };
+		taupeInfo.timer.start();
+		_spawnedTaupesInfo.push_back(taupeInfo);		
 	}
 }
 
