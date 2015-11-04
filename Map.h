@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "Trou.h"
+#include "Timer.h"
 
 class Map
 {
@@ -11,6 +12,12 @@ private:
 	Permet de stocker les trous créés
 	*/
 	std::vector<Trou*> map;
+	std::vector<Timer> _hideTimers;
+	std::vector<int> _spawnedTaupes;
+	float _spawnFreq = 2;
+	float _hideDelay = 2;
+	Timer _timer;
+	float _nbMaxTaupes;
 
 public:
 	/*
@@ -36,6 +43,7 @@ public:
 	*/
 	void draw(CHAR_INFO* buffer, COORD dwBufferSize) const;
 
+	void Map::updateTaupe();
 	/*
 	Destructeur
 	*/
