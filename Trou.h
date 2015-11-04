@@ -13,13 +13,13 @@ private:
 
 	/*
 	Attribut m_x
-	Numéro de la ligne sur laquelle se situe le coin haut gauche du trou
+	Numéro de la colonne sur laquelle se situe le coin haut gauche du trou
 	*/
 	int m_x;
 
 	/*
 	Attribut m_y
-	Numéro de la colonne sur laquelle se situe le coin haut gauche du trou
+	Numéro de la ligne sur laquelle se situe le coin haut gauche du trou
 	*/
 	int m_y;
 
@@ -62,15 +62,21 @@ public:
 
 	/*
 	Méthode getX
-	Permet de connaître la ligne du coin haut gauche du trou
+	Permet de connaître la colonne du coin haut gauche du trou
 	*/
 	int getX() const { return this->m_x; }
 
 	/*
 	Méthode getY
-	Permet de connaître la colonne du coin haut gauche du trou
+	Permet de connaître la ligne du coin haut gauche du trou
 	*/
 	int getY() const { return this->m_y; }
+
+	/*
+	Méthode hit
+	Permet de savoir si on a cliqué sur une taupe
+	*/
+	bool hit(COORD clic);
 
 	/*
 	Méthode de classe getLargeur
