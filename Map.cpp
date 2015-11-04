@@ -20,7 +20,16 @@ Permet de savoir si une place pour un trou avec le coin haut gauche dont les coo
 bool Map::estDisponible(int x, int y) const {
 	int largeur = Trou::getLargeur();
 	int hauteur = Trou::getHauteur();
-	//à compléter
+	
+	for (unsigned int i(0); i < this->map.size(); i++) {
+		int _x = this->map[i]->getX();
+		int _y = this->map[i]->getY();
+
+		if (abs(x - _x) < hauteur && abs(y - _y) < largeur) {
+			return false;
+		}
+	}
+
 	return true;
 }
 
@@ -29,7 +38,9 @@ Méthode ajouterTrou
 Permet de créer un trou et de l'ajouter dans la liste
 */
 void Map::ajouterTrou(int x, int y) {
-	this->map.push_back(new Trou(x, y));
+	if (this->estDisponible(x, y)) {
+		this->map.push_back(new Trou(x, y));
+	}
 }
 
 /*
