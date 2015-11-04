@@ -9,9 +9,10 @@ Auteurs : François Rivoire et Yanis Berry
 #include "InputManager.h"
 
 
-InputManager::InputManager(HANDLE hInput, int nbInputs) :_hInput(hInput), _nbDetectedInputs(0)
-{	
+InputManager::InputManager(int nbInputs) : _nbDetectedInputs(0)
+{
 	//Allocation du tableau de récupération des inputs :
+	_hInput = (HANDLE)GetStdHandle(STD_INPUT_HANDLE);
 	_input_records.resize(nbInputs);
 }
 
@@ -23,7 +24,7 @@ InputManager::~InputManager()
 void InputManager::update()
 {
 	_nbDetectedInputs = 0;
-	
+
 	//Récupération des inputs -> mise à jour de _input_records et _nbDetectedInputs
 	ReadConsoleInput(_hInput, &_input_records[0], _input_records.size(), &_nbDetectedInputs);
 }
