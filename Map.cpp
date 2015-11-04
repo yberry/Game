@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "Map.h"
+#include <stdlib.h>
+#include <time.h>
 
 using namespace std;
 
@@ -8,6 +10,7 @@ Constructeur de Map
 */
 Map::Map()
 {
+	
 }
 
 /*
@@ -36,6 +39,23 @@ Permet de dessiner tous les trous contenus dans la liste
 void Map::draw(CHAR_INFO* buffer, COORD dwBufferSize) const {
 	for (unsigned int i(0); i < this->map.size(); i++) {
 		this->map[i]->draw(buffer, dwBufferSize, 'O');
+	}
+}
+
+//WIP
+void Map::updateTaupe() {
+	srand(time(NULL));
+	int spawn = rand() % 20 + 1;
+	if (spawn == 2) {
+		int size = (int) this->map.size();
+		int num = rand() % size;
+		Trou* trou = this->map[num];
+		while (trou->getTaupe()) {
+			num = rand() % size;
+			trou = this->map[num];
+		}
+		trou->setTaupe(true);
+
 	}
 }
 
