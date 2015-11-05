@@ -26,7 +26,9 @@ void InputManager::update()
 	_nbDetectedInputs = 0;
 
 	//Récupération des inputs -> mise à jour de _input_records et _nbDetectedInputs
-	ReadConsoleInput(_hInput, &_input_records[0], _input_records.size(), &_nbDetectedInputs);
+	GetNumberOfConsoleInputEvents(_hInput, &_nbDetectedInputs);
+	if (_nbDetectedInputs > 0)
+		ReadConsoleInput(_hInput, &_input_records[0], _input_records.size(), &_nbDetectedInputs);
 }
 
 COORD InputManager::getMousePos()
