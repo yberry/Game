@@ -21,7 +21,7 @@ private:
 	std::vector<Trou*> map;
 	std::list<SpawnedTaupeInfo> _spawnedTaupesInfo;
 	float _spawnFreq = 2;
-	float _hideDelay = 1.5;
+	float _hideDelay = 1;
 	Timer _spawnTimer;
 	float _nbMaxTaupes;
 
@@ -59,7 +59,7 @@ public:
 	Méthode hit
 	Permet de vérifier le clic sur une taupe
 	*/
-	bool hit(COORD clic);
+	int hit(COORD clic);
 
 	/*
 	Destructeur
