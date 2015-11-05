@@ -22,8 +22,10 @@ private:
 	Attribut freq_marteau
 	Permet de régler le temps d'inactivité du marteau
 	*/
-	float freq_marteau = 1;
+	float freq_marteau = 0.5f;
 
+	bool frappe;
+	
 public:
 	/*
 	Constructeur
@@ -35,6 +37,12 @@ public:
 	Permet de récupérer les coordonnées du clic
 	*/
 	COORD jouer();
+
+	/*
+	Méthode draw
+	Permet de dessiner le marteau du joueur
+	*/
+	void draw(CHAR_INFO* buffer, COORD bufferSize);
 
 	/*
 	Destructeur
