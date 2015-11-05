@@ -1,15 +1,36 @@
 #pragma once
 
 #include <Windows.h>
+#include "Timer.h"
+
+enum TaupeStates
+{
+	HIDDEN,
+	BAD_OUT,
+	BAD_ANGRY,
+	NICE_OUT,
+	NICE_SAD
+};
 
 class Trou
 {
 private:
 	/*
 	Attribut m_taupe
-	Définit si la taupe est sortie de sa tanière ou non
+	Définit l'état de la taupe du trou :
+	0 = cachée
+	1 = taupe sortie
+	2 = taupe en colère
+	3 = taupe gentille sortie
+	4 = taupe gentille triste
 	*/
-	bool m_taupe;
+	TaupeStates _taupe_state;
+
+	/*
+	Attribut _animation_timer
+	Permet de mesurer le défilement du temps pour animer la taupe.
+	*/
+	Timer _animation_timer;
 
 	/*
 	Attribut m_x
@@ -46,19 +67,25 @@ public:
 	Méthode draw
 	Permet d'afficher le trou à l'écran en utilisant un certain caractère
 	*/
-	void draw(CHAR_INFO* buffer, COORD bufferSize, char lettre) const;
+	void draw(CHAR_INFO* buffer, COORD bufferSize, char lettre);
 
 	/*
 	Méthode getTaupe
 	Permet de savoir si la taupe est sortie de sa tanière ou non
 	*/
-	bool getTaupe() const { return this->m_taupe; }
+	bool isOccupied() const { return (!_taupe_state == HIDDEN); }
 
 	/*
-	Méthode setTaupe
-	Permet de configurer la sortie de la taupe
+	Méthode spawnTaupe
+	Permet de faire apparaître une taupe dans le trou
 	*/
-	void setTaupe(bool taupe) { this->m_taupe = taupe; }
+	void spawnTaupe();
+
+	/*
+	Méthode hideTaupe
+	Permet de faire rentrer la taupe dans le trou
+	*/
+	void hideTaupe() { _taupe_state = HIDDEN; }
 
 	/*
 	Méthode getX
@@ -76,7 +103,7 @@ public:
 	Méthode hit
 	Permet de savoir si on a cliqué sur une taupe
 	*/
-	bool hit(COORD clic);
+	int hit(COORD clic);
 
 	/*
 	Méthode de classe getLargeur
